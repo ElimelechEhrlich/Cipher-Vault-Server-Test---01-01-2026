@@ -1,6 +1,6 @@
 import { reverseAndtoLowerCaseText, reverseAndUppercaseText } from "../services/messagesS.js"
 import { getUserByUserName } from "../DAL/usersDAL.js"
-import { insertTo } from "../DAL/messagesDAL.js"
+import { insertTo, updateEncryptedMessagesCountByUser } from "../DAL/messagesDAL.js"
 
 async function addMessage(req, res) {
     try {
