@@ -1,4 +1,4 @@
-import { insertData } from "../DAL/usersDAL.js"
+import { getUserByUserName, insertData } from "../DAL/usersDAL.js"
 import { validateuser } from "../DAL/messagesDAL.js"
 
 async function addUser(req, res) {
@@ -12,6 +12,16 @@ async function addUser(req, res) {
         }
     } catch (error) {
         res.status(500).json({ error })
+    }
+}
+
+async function getUserByUsername(req, res) {
+    try {
+        const user = await getUserByUserName(req.body.username)
+        if (user) res.json({username: user.username, encryptedMessagesCount: user.encryptedMessagesCount})
+        else res.status(404).json({message: "user is not depind."})
+    } catch (error) {
+        res.status(500).json(error)
     }
 }
 
@@ -34,5 +44,6 @@ async function validateUser(req, res) {
 
 export {
     addUser,
+    getUserByUsername,
     validateUser
 }

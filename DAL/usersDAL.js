@@ -22,7 +22,7 @@ export async function getDataByUserId(id) {
     }
 }
 
-export async function getUserByUsername(username) {
+export async function getUserByUserName(username) {
     try {
         const result = await users.findOne({username})
         return result

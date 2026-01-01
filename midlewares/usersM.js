@@ -1,4 +1,4 @@
-import { getUserByUsername } from "../DAL/usersDAL.js";
+import { getUserByUserName } from "../DAL/usersDAL.js";
 import supabase from "../db/supabaseDbConnection.js";
 
 async function validateFieldsInBody(req, res, next) {
@@ -44,7 +44,7 @@ async function validateTypes(req, res, next) {
 
 const isUserNotExsist = async (req, res, next) => {
     try {
-        const result = await getUserByUsername(req.body.username)       
+        const result = await getUserByUserName(req.body.username)       
         if (!result) next()
         else res.sendStatus(409)
     } catch (error) {
@@ -55,9 +55,24 @@ const isUserNotExsist = async (req, res, next) => {
     }
 }
 
+const UserAuthentication = async (req, res, next) => {
+    try {
+        const result = await getUserByUserName(req.body.username)       
+        if (result) {
+            if(req.body.password === result.password) next()
+            else res.status(401).json({message: "User is not verified."})
+        }
+        else res.sendStatus(409)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)    
+    }
+}
+
 export {
     validateFieldsInBody,
     validateTypes,
     isUserNotExsist,
-    validateUserToNext
+    validateUserToNext,
+    UserAuthentication
 }
