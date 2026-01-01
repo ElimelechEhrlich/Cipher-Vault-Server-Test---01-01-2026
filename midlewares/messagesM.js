@@ -1,16 +1,20 @@
 // // import { getDataById } from "../DAL/usersDAL.js"
 // // import { getUserByUsername } from "../DAL/messagesDAL.js"
 
-// async function validateFieldsInBody(req, res, next) {
-//     try {
-//         if (req.body.username && req.body.password) {
-//             next()
-//         }
-//         else res.sendStatus(409)
-//     } catch (error) {
-//         res.status(500).json({ error })
-//     }
-// }
+async function validateFieldsInBody(req, res, next) {
+    try {
+        if (req.body.message && req.body.cipher_type) {
+            console.log("ooo");
+            
+            next()
+        }
+        else res.sendStatus(409)
+    } catch (error) {
+        console.log(error);
+        
+        res.status(500).json({ error })
+    }
+}
 
 
 
@@ -30,9 +34,8 @@
 // //     }
 // // }
 
-// export {
-//     validateFieldsInBody,
-//     validateUsersMessage
-// }
+export {
+    validateFieldsInBody,
+}
 
 

@@ -1,7 +1,7 @@
 import { getUserByUserName } from "../DAL/usersDAL.js";
 import supabase from "../db/supabaseDbConnection.js";
 
-async function validateFieldsInBody(req, res, next) {
+async function validateFieldsInbody(req, res, next) {
     try {
         if (req.body.username && req.body.password ) {
             next()    
@@ -13,22 +13,22 @@ async function validateFieldsInBody(req, res, next) {
     }
 }
 
-async function validateUserToNext (req, res, next) {
-    if ((req.body.username) && (req.body.password)) {
-        try {
-            const {username, password} = req.body
-            const result = await validateuser(username, password)
-            if (result.length > 0) {
-                next()
-            }
-            else res.json({ massege: "Wrong password"  })
-        } catch (error) {
-            console.error(error)
-            res.status(500).json({error})
-        }
-    }
-    else res.sendStatus(400)
-}
+// async function validateUserToNext (req, res, next) {
+//     if ((req.body.username) && (req.body.password)) {
+//         try {
+//             const {username, password} = req.body
+//             const result = await validateuser(username, password)
+//             if (result.length > 0) {
+//                 next()
+//             }
+//             else res.json({ massege: "Wrong password"  })
+//         } catch (error) {
+//             console.error(error)
+//             res.status(500).json({error})
+//         }
+//     }
+//     else res.sendStatus(400)
+// }
 
 async function validateTypes(req, res, next) {
     try {
@@ -58,6 +58,8 @@ const isUserNotExsist = async (req, res, next) => {
 const UserAuthentication = async (req, res, next) => {
     try {
         const result = await getUserByUserName(req.body.username)       
+        console.log(result);
+        
         if (result) {
             if(req.body.password === result.password) next()
             else res.status(401).json({message: "User is not verified."})
@@ -70,9 +72,8 @@ const UserAuthentication = async (req, res, next) => {
 }
 
 export {
-    validateFieldsInBody,
+    validateFieldsInbody,
     validateTypes,
     isUserNotExsist,
-    validateUserToNext,
     UserAuthentication
 }

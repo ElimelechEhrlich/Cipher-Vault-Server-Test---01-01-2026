@@ -6,9 +6,23 @@ async function getAllUsers() {
     return data
 }
 
-async function insertTo(username, password) {
-    const { data, error } = await supabase.from("users").insert({ username, password }).select()
-    if (error) throw error    
+async function insertTo(username, cipher_type, encrypted_text) {
+    const { data, error } = await supabase.from("messages").insert({ username, cipher_type, encrypted_text }).select().single()
+    if (error) {
+        console.log(error);
+        throw error    
+    }
+    return data
+}
+
+
+export async function updateEncryptedMessagesCountByUser(username, encryptedMessagesCount) {
+    const { data, error } = await supabase.from('messages')
+    .update({encryptedMessagesCount})
+    .eq('username',username)
+    .select("")
+    .single()
+    if (error) throw error
     return data
 }
 

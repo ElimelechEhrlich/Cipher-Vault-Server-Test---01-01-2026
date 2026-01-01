@@ -1,12 +1,16 @@
-import { getData, insertData, updateDataById, deleteDataById, getDataByUserId } from "../DAL/usersDAL.js"
-import { getUserById, getUserByUsername } from "../DAL/messagesDAL.js"
+import { reverseAndUppercaseText } from "../services/messagesS.js"
+import { getUserByUserName } from "../DAL/usersDAL.js"
+import { insertTo } from "../DAL/messagesDAL.js"
 
 async function addMessage(req, res) {
     try {
-        const { content } = req.body
-        const user = await getUserByUsername(req.body.username)
-        const result = await insertData({ userId: user.id, username: req.body.username, content })
-        res.json({ insertid: result })
+        const { message, cipher_type } = req.body
+        const encrypted_text = reverseAndUppercaseText(message)
+        const username = req.body.username
+        const result = await insertTo(username, cipher_type, encrypted_text)
+        const user = await getUserByUserName(req.body.username)
+        updateEncryptedMessagesCountByUser(user.username, user.encryptedMessagesCount + 1)
+        res.json({id: result.id, cipher_type: result.cipher_type, encrypted_text: result.encrypted_text})
     } catch (error) {
         res.status(500).json({ error })
     }
