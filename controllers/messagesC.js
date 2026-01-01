@@ -9,7 +9,7 @@ async function addMessage(req, res) {
         const username = req.body.username
         const result = await insertTo(username, cipher_type, encrypted_text)
         const user = await getUserByUserName(req.body.username)
-        updateEncryptedMessagesCountByUser(user.username, user.encryptedMessagesCount + 1)
+        await updateEncryptedMessagesCountByUser(user.username, user.encryptedMessagesCount + 1)
         res.json({id: result.id, cipher_type: result.cipher_type, encrypted_text: result.encrypted_text})
     } catch (error) {
         res.status(500).json({ error })
