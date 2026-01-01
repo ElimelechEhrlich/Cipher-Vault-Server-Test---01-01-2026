@@ -22,8 +22,8 @@ async function decryptMessage(req, res) {
     } catch (error) {
         res.status(500).json({ error })
     }
-    
 }
+
 export {
     addMessage,
     decryptMessage

@@ -1,5 +1,4 @@
 import { getUserByUserName } from "../DAL/usersDAL.js";
-import supabase from "../db/supabaseDbConnection.js";
 
 async function validateFieldsInbody(req, res, next) {
     try {
@@ -8,27 +7,9 @@ async function validateFieldsInbody(req, res, next) {
         }
         else res.sendStatus(409)
     } catch (error) {
-        console.log("validateFieldsInBody catch");
         res.status(500).json({ error })
     }
 }
-
-// async function validateUserToNext (req, res, next) {
-//     if ((req.body.username) && (req.body.password)) {
-//         try {
-//             const {username, password} = req.body
-//             const result = await validateuser(username, password)
-//             if (result.length > 0) {
-//                 next()
-//             }
-//             else res.json({ massege: "Wrong password"  })
-//         } catch (error) {
-//             console.error(error)
-//             res.status(500).json({error})
-//         }
-//     }
-//     else res.sendStatus(400)
-// }
 
 async function validateTypes(req, res, next) {
     try {
@@ -48,9 +29,6 @@ const isUserNotExsist = async (req, res, next) => {
         if (!result) next()
         else res.sendStatus(409)
     } catch (error) {
-        console.log("isUserNotExsist catch")
-        console.log(error);
-        
         res.status(500).send(error)    
     }
 }
@@ -66,7 +44,6 @@ const UserAuthentication = async (req, res, next) => {
         }
         else res.sendStatus(409)
     } catch (error) {
-        console.log(error);
         res.status(500).send(error)    
     }
 }
