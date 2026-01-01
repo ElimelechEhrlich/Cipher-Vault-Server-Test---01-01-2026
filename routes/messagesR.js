@@ -1,12 +1,12 @@
 import express from "express"
 import { UserAuthentication, validateFieldsInbody } from "../midlewares/usersM.js"
-import { addMessage } from "../controllers/messagesC.js"
-import { validateFieldsInBody } from "../midlewares/messagesM.js"
+import { addMessage, decryptMessage } from "../controllers/messagesC.js"
+import { validateDecryptFieldsInBody, validateMessageFieldsInBody } from "../midlewares/messagesM.js"
 
 const router = express.Router()
 
-router.post("/encrypt",validateFieldsInbody, UserAuthentication, validateFieldsInBody, addMessage )
-router.post("/decrypt", () => {} )
-router.get("/", () => {} )
+router.post("/encrypt",validateFieldsInbody, UserAuthentication, validateMessageFieldsInBody, addMessage )
+router.post("/decrypt", validateFieldsInbody, UserAuthentication, validateDecryptFieldsInBody, decryptMessage )
+router.get("/", validateFieldsInbody, UserAuthentication,  )
 
 export default router
