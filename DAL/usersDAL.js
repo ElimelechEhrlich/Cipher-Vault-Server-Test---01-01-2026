@@ -1,59 +1,59 @@
-import supabase from "../db/supabaseDbConnection.js";
+import connect from "../db/mongoDbConnection.js"
+import {ObjectId} from "mongodb"
 
-async function getAllUsers() {
-    const { data, error } = await supabase.from("users").select("*")
-    if (error) throw error
-    return data
-}
+const users = connect.collection("users")
 
-async function insertTo(username, password) {
-    const { data, error } = await supabase.from("users").insert({ username, password }).select()
-    if (error) throw error    
-    return data
-}
-
-async function getUserById(id) {
+export async function getData() {
     try {
-        const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", id)
-            .single()
-        if (error) throw error
-        return data
+        const result = await messages.find({}).toArray()
+        return result
     } catch (error) {
-        res.status(500).json({ error })
-    }
-}        
-
-const validateUser = async (username, password) => {
-    try {
-        const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("username", username)
-            .eq("password", password)
-        if (error) throw error
-        return data
-    } catch (error) {
-        throw error
+        return {error}    
     }
 }
 
+export async function getDataByUserId(id) {
+    try {
+        const result = await messages.find({userId: id}).toArray()
 
-async function getUserByUsername(username) {
-    const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("username", username)
-        .single()
-    if (error) throw error
-    return data
+        return result
+    } catch (error) {
+        return {error}    
+    }
 }
 
-export {
-    validateUser,
-    insertTo,
-    getUserById,
-    getUserByUsername
+export async function getUserByUsername(username) {
+    try {
+        const result = await users.findOne({username})
+        return result
+    } catch (error) {
+        throw error  
+    }
+}
+
+export async function insertData(data) {
+    try {
+        const result = await users.insertOne(data)
+        return {id: result.insertedId, username: data.username}
+    } catch (error) {
+        throw error     
+    }
+}
+
+export async function updateDataById(id, data = {}) {
+    try {
+        const result = messages.updateOne({_id: new ObjectId(id)}, {$set: data})
+        return result
+    } catch (error) {
+        return error 
+    }
+}
+
+export async function deleteDataById(id) {
+    try {
+        const result = messages.deleteOne({_id: new ObjectId(id)})
+        return result
+    } catch (error) {
+        return error    
+    }
 }

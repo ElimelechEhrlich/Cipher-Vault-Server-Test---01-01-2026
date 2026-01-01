@@ -1,12 +1,12 @@
-import { getData, insertData, updateDataById, deleteDataById, getDataByUserId } from "../DAL/messageDAL.js"
-import { getUserById, getUserByUsername } from "../DAL/usersDAL.js"
+import { getData, insertData, updateDataById, deleteDataById, getDataByUserId } from "../DAL/usersDAL.js"
+import { getUserById, getUserByUsername } from "../DAL/messagesDAL.js"
 
 async function addMessage(req, res) {
     try {
         const { content } = req.body
-        const user = await getUserByUsername(req.body.username)       
+        const user = await getUserByUsername(req.body.username)
         const result = await insertData({ userId: user.id, username: req.body.username, content })
-        res.json({insertid: result})
+        res.json({ insertid: result })
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -15,7 +15,7 @@ async function addMessage(req, res) {
 async function getMessagesSortedByCreated_at(req, res) {
     try {
         const result = await getData()
-        const data = result.sort((a,b) => b.created_at - a.created_at)
+        const data = result.sort((a, b) => b.created_at - a.created_at)
         res.json(data)
     } catch (error) {
         res.status(500).json()
@@ -29,12 +29,12 @@ async function getMessageByUser(req, res) {
         console.log(typeof user.username);
         console.log(req.body.username);
         console.log(typeof req.body.username);
-        
-        
+
+
         if (user.username === req.body.username) {
             const result = await getDataByUserId(user.id)
             console.log(result);
-            
+
             res.json(result)
         }
         else res.json("This is not your id.")
